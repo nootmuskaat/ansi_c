@@ -9,7 +9,7 @@ int main() {
     int len;
     char line[MAXLEN];
     while ((len=reverse(line, MAXLEN)) > 0)
-        printf("%s\n", line);
+        printf("%s", line);
     return 0;
 }
 
@@ -22,7 +22,7 @@ int reverse(char str[], int max) {
     for (j=i; j > 0; --j)
         str[i-j] = holder[j-1];
     if (c == '\n') {
-        str[i] == '\n';
+        str[i] = '\n';
         ++i;
     }
     str[i] = '\0';
