@@ -1,6 +1,7 @@
 CC=gcc
+CFLAGS=-Wall -Werror
 
 %.o: %.c
-	$(CC) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^
 
 
