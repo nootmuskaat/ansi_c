@@ -144,14 +144,16 @@ void ungetch(int);
 
 int getop(char s[]) {
     int i, c, tmp;
-
+    // find first non-whitespace
     while ((s[0] = c = getch()) == ' ' || c == '\t')
         ;
     s[1] = '\0';
-    if (!isdigit(c) && c != '.' && c != '-') {
-        ptop();
+    // return operators (exc '-')
+    if (!isdigit(c) && !isalpha(c) && c != '.' && c != '-') {
+        //ptop();
         return c;
     }
+    // asses if '-' is a negative number or minus
     if (c == '-' && (isspace(tmp = getch()))) {
         ungetch(tmp);
         return c;
@@ -163,6 +165,18 @@ int getop(char s[]) {
     }
     else
         i = 0;
+    // extended math functions
+    if (isalpha(c)) {
+        while (!isspace(s[++i] = c = getch()))
+            ;
+        ungetch(c);
+        s[i] = '\0';
+        if (!strcmp(s, "atan2") || !strcmp(s, "pow") || !strcmp(s, "fmod"))
+            return MATH_2;
+        else
+            return MATH_1;
+    }
+    // numbers
     if (isdigit(c))
         while (isdigit(s[++i] = c = getch()))
             ;
