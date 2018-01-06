@@ -6,6 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <math.h>
+#include <string.h>
 
 #define MAXOP 100
 #define NUMBER '0'
@@ -173,12 +175,46 @@ int getop(char s[]) {
     return NUMBER;
 }
 
-double math1(char func[], double x) {
-    TODO;
+// This could probably be written with some type of eval statment
+// if I knew how
+double math1(char s[], double x) {
+    if (!strcmp(s, "sin"))
+        return sin(x);
+    else if (!strcmp(s, "cos"))
+        return cos(x);
+    else if (!strcmp(s, "tan"))
+        return tan(x);
+    else if (!strcmp(s, "asin"))
+        return asin(x);
+    else if (!strcmp(s, "acos"))
+        return acos(x);
+    else if (!strcmp(s, "atan"))
+        return atan(x);
+    else if (!strcmp(s, "exp"))
+        return exp(x);
+    else if (!strcmp(s, "log"))
+        return log(x);
+    else if (!strcmp(s, "log10"))
+        return log10(x);
+    else if (!strcmp(s, "sqrt"))
+        return sqrt(x);
+    else {
+        printf("error: unknown function '%s'", s);
+        return 0.0;
+    }
 }
 
-double math2(char func[], double x, double y) {
-    TODO;
+double math2(char s[], double x, double y) {
+    if (!strcmp(s, "atan2"))
+        return atan2(x, y);
+    else if (!strcmp(s, "pow"))
+        return pow(x, y);
+    else if (!strcmp(s, "fmod"))
+        return fmod(x, y);
+    else {
+        printf("error: unknown function '%s'", s);
+        return 0.0;
+    }
 }
 
 #define BUFSIZE 100
