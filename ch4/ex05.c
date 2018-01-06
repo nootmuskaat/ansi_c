@@ -9,7 +9,11 @@
 
 #define MAXOP 100
 #define NUMBER '0'
+#define MATH_1 '1' // functions from math.h with 1 arg
+#define MATH_2 '2' // funcitons from math.h with 2 args
 
+double math1(char func[], double x);
+double math2(char func[], double x, double y);
 int getop(char []);
 void push(double);
 double pop(void);
@@ -27,6 +31,13 @@ int main() {
         switch (type) {
         case NUMBER:
             push(atof(s));
+            break;
+        case MATH_1:
+            push(math1(s, pop()));
+            break;
+        case MATH_2:
+            op2 = pop();
+            push(math2(s, pop(), op2));
             break;
         case '+':
             push(pop() + pop());
@@ -160,6 +171,14 @@ int getop(char s[]) {
     if (c != EOF)
         ungetch(c);
     return NUMBER;
+}
+
+double math1(char func[], double x) {
+    TODO;
+}
+
+double math2(char func[], double x, double y) {
+    TODO;
 }
 
 #define BUFSIZE 100
