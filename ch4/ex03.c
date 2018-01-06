@@ -1,6 +1,10 @@
-/* original reverse polish notation calculator from K&R */
+/**
+ * Given the basic framework, it's straightforward to extend the calculator.
+ * Add the modulus ( % ) operator and provisions for negative numbers.
+ **/
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #define MAXOP 100
 #define NUMBER '0'
@@ -33,6 +37,13 @@ int main() {
             op2 = pop();
             if (op2 != 0.0)
                 push(pop() / op2);
+            else
+                printf("error: cannot divide by zero");
+            break;
+        case '%':
+            op2 = (int) pop();
+            if (op2 != 0.0)
+                push((int) pop() % (int) op2);
             else
                 printf("error: cannot divide by zero");
             break;
@@ -74,14 +85,24 @@ int getch(void);
 void ungetch(int);
 
 int getop(char s[]) {
-    int i, c;
+    int i, c, tmp;
 
     while ((s[0] = c = getch()) == ' ' || c == '\t')
         ;
     s[1] = '\0';
-    if (!isdigit(c) && c != '.')
+    if (!isdigit(c) && c != '.' && c != '-')
         return c;
-    i = 0;
+    if (c == '-' && (isspace(tmp = getch()))) {
+        ungetch(tmp);
+        return c;
+    }
+    else if (c == '-') {
+        c = tmp;
+        i = 1;
+        s[i] = c;
+    }
+    else
+        i = 0;
     if (isdigit(c))
         while (isdigit(s[++i] = c = getch()))
             ;
