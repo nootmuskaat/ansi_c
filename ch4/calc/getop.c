@@ -1,16 +1,23 @@
+/*
+ * ch4/ex11: Modify getop so that it doesn't need to use ungetch.
+ * Hint: use an internal static variable
+ */
 #include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include "calc.h"
 
+#define MAXOP 100
+
 int getch(void);
-void ungetch(int);
 
 int getop(char s[]) {
     int i, c, tmp;
+    static int buf[MAXOP];
+    static int bufp = 0;
     // find first non-whitespace
-    while ((s[0] = c = getch()) == ' ' || c == '\t')
+    while ((s[0] = c = (bufp > 0) ? buf[--bufp] : getch()) == ' ' || c == '\t')
         ;
     s[1] = '\0';
     // return operators (exc '-')
@@ -19,8 +26,8 @@ int getop(char s[]) {
         return c;
     }
     // asses if '-' is a negative number or minus
-    if (c == '-' && (isspace(tmp = getch()))) {
-        ungetch(tmp);
+    if (c == '-' && (isspace(tmp = (bufp > 0)?buf[--bufp]:getch()))) {
+        buf[bufp++] = tmp;
         return c;
     }
     else if (c == '-') {
@@ -32,9 +39,9 @@ int getop(char s[]) {
         i = 0;
     // extended math functions
     if (isalpha(c)) {
-        while (!isspace(s[++i] = c = getch()))
+        while (!isspace(s[++i] = c = (bufp > 0)?buf[--bufp]:getch()))
             ;
-        ungetch(c);
+        buf[bufp++] = c;
         s[i] = '\0';
         if (!strcmp(s, "atan2") || !strcmp(s, "pow") || !strcmp(s, "fmod"))
             return MATH_2;
@@ -43,14 +50,14 @@ int getop(char s[]) {
     }
     // numbers
     if (isdigit(c))
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = c = (bufp > 0)?buf[--bufp]:getch()))
             ;
     if (c == '.')
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = c = (bufp > 0)?buf[--bufp]:getch()))
             ;
     s[i] = '\0';
     if (c != EOF)
-        ungetch(c);
+        buf[bufp++] = c;
     return NUMBER;
 }
 
