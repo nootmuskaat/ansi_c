@@ -12,10 +12,8 @@ int strend(char *s, char *t) {
         ps++;
     while (*pt)
         pt++;
-    while (*pt == *ps && pt >= t && ps >= s) {
-        pt--;
-        ps--;
-    }
+    for ( ; *pt == *ps && pt >= t && ps >= s; pt--, ps--)
+        ;
     // if the loop exited because all of t was found in s
     if (pt < t)
         return 1;
