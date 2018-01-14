@@ -4,10 +4,14 @@
  * For example, strncpy(s,t,n) copies at most n characters of t to s .
  * Full descriptions are in Appendix B
  **/
+#include <assert.h>
+#include <string.h>
+#include <stdio.h>
 
-void my_strncpy(char *s, char *t, int n);
-void my_strncat(char *s, char *t, int n);
-int my_strncmp(char *s, char *t, int n);
+char *my_strncpy(char *s, const char *t, int n);
+char *my_strncat(char *s, const char *t, int n);
+int my_strncmp(const char *s, const char *t, int n);
+
 int test_strncpy(void);
 int test_strncat(void);
 int test_strncmp(void);
@@ -20,26 +24,51 @@ int main() {
 }
 
 
-void my_strncpy(char *s, char *t, int n){
-    return;
+char *my_strncpy(char *s, const char *t, int n){
+    // does not confirm s has space
+    char *ps = s;
+    for ( ; n > 0 && (*ps = *t); n--, t++, ps++)
+        ;
+    return s;
 }
 
-void my_strncat(char *s, char *t, int n){
-    return;
-}
-
-int my_strncmp(char *s, char *t, int n){
+int test_strncpy(void) {
+    char s[] = "TESTING";
+    char *ps;
+    ps = my_strncpy(s, "HACK", 4);
+    assert(!strcmp(ps, "HACKING"));
+    ps = my_strncpy(s, "HACK", 6);
+    assert(!strcmp(ps, "HACK"));
     return 0;
 }
 
-int test_strncpy(void){
+char *my_strncat(char *s, const char *t, int n) {
+    char *ps = s;
+    for ( ; *ps; ps++)
+        ;
+    for ( ; n > 0 && (*ps = *t); n--, ps++, t++)
+        ;
+    if (*ps)
+        *(++ps) = '\0';
+    return s;
+}
+
+int my_strncmp(const char *s, const char *t, int n) {
     return 0;
 }
 
-int test_strncat(void){
+int test_strncat(void) {
+    char s[100] = "walk";
+    char *ps;
+    ps = my_strncat(s, "nonsense", 0);
+    assert(!strcmp(s, "walk"));
+    ps = my_strncat(s, " the dog, please.", 8);
+    assert(!strcmp(ps, "walk the dog"));
+    ps = my_strncat(s, ", please!!!", 8);
+    assert(!strcmp(ps, "walk the dog, please"));
     return 0;
 }
 
-int test_strncmp(void){
+int test_strncmp(void) {
     return 0;
 }
