@@ -6,7 +6,6 @@
  **/
 #include <assert.h>
 #include <string.h>
-#include <stdio.h>
 
 char *my_strncpy(char *s, const char *t, int n);
 char *my_strncat(char *s, const char *t, int n);
@@ -23,23 +22,12 @@ int main() {
     return 0;
 }
 
-
 char *my_strncpy(char *s, const char *t, int n){
     // does not confirm s has space
     char *ps = s;
     for ( ; n > 0 && (*ps = *t); n--, t++, ps++)
         ;
     return s;
-}
-
-int test_strncpy(void) {
-    char s[] = "TESTING";
-    char *ps;
-    ps = my_strncpy(s, "HACK", 4);
-    assert(!strcmp(ps, "HACKING"));
-    ps = my_strncpy(s, "HACK", 6);
-    assert(!strcmp(ps, "HACK"));
-    return 0;
 }
 
 char *my_strncat(char *s, const char *t, int n) {
@@ -54,6 +42,21 @@ char *my_strncat(char *s, const char *t, int n) {
 }
 
 int my_strncmp(const char *s, const char *t, int n) {
+    while (n > 0) {
+        if (*s != *t)
+            return (*s - *t);
+        n--, s++, t++;
+    }
+    return 0;
+}
+
+int test_strncpy(void) {
+    char s[] = "TESTING";
+    char *ps;
+    ps = my_strncpy(s, "HACK", 4);
+    assert(!strcmp(ps, "HACKING"));
+    ps = my_strncpy(s, "HACK", 6);
+    assert(!strcmp(ps, "HACK"));
     return 0;
 }
 
@@ -70,5 +73,8 @@ int test_strncat(void) {
 }
 
 int test_strncmp(void) {
+    assert(my_strncmp("DOG", "dog", 3) < 0);
+    assert(my_strncmp("dog", "doggy", 3) == 0);
+    assert(my_strncmp("doggy", "dog", 4) > 0);
     return 0;
 }
