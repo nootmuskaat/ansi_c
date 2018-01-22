@@ -62,5 +62,26 @@ int bowl_score(void) {
 }
 
 void print_score(void) {
+    int fr, total;
+    
+    // individual throws
+    for (fr = 0; fr < 10; fr++) {
+        if (score[fr][0] == 10)
+            printf(" [X] ");
+        else if (score[fr][0] + score[fr][1] == 10)
+            printf("%1d[/] ", score[fr][0]);
+        else
+            printf("%1d[%1d] ", score[fr][0], score[fr][1]);
+    }
+    printf("\n");
+
+    // frame totals
+    total = 0;
+    for (fr = 0; fr < 10; fr++) {
+        total += (score[fr][0] + score[fr][1] + score[fr][2]);
+        printf("%4d ", total);
+    }
+    printf("\n");
+
     return;
 }

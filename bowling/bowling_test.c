@@ -7,6 +7,7 @@ void test_all_gutter() {
     while (bowl_roll(0) == 0)
         ;
     assert(bowl_score() == 0 && "test_all_gutter()");
+    print_score();
 }
 
 void test_one_pin() {
@@ -14,6 +15,7 @@ void test_one_pin() {
     while (bowl_roll(1) == 0)
         ;
     assert(bowl_score() == 20 && "test_one_pin()");
+    print_score();
 }
 
 void test_all_spares() {
@@ -21,6 +23,7 @@ void test_all_spares() {
     while (bowl_roll(5) == 0)
         ;
     assert(bowl_score() == 150 && "test_all_spares()");
+    print_score();
 }
 
 void test_all_strikes() {
@@ -28,6 +31,7 @@ void test_all_strikes() {
     while (bowl_roll(10) == 0)
         ;
     assert(bowl_score() == 300 && "test_all_strikes()");
+    print_score();
 }
 
 int main() {
