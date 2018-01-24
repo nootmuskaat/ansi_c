@@ -6,18 +6,20 @@
 #include <string.h>
 
 #define MAXLINES 5000
+#define ALLOCSIZE 10000
 
 char *lineptr[MAXLINES];
 
-int readlines(char *lineptr[], int nlines);
+int readlines(char *lineptr[], int nlines, char *allocbuf);
 void writelines(char *lineptr[], int nlines);
 
 void qsort(char *lineptr[], int left, int right);
 
 int main() {
     int nlines;
+    char allocbuf[ALLOCSIZE];
 
-    if ((nlines = readlines(lineptr, MAXLINES)) >= 0) {
+    if ((nlines = readlines(lineptr, MAXLINES, allocbuf)) >= 0) {
         qsort(lineptr, 0, nlines-1);
         writelines(lineptr, nlines);
         return 0;
@@ -30,19 +32,20 @@ int main() {
 
 #define MAXLEN 1000
 int getline(char *, int);
-char *alloc(int);
 
-int readlines(char *lineptr[], int maxlines) {
+int readlines(char *lineptr[], int maxlines, char *allocbuf) {
     int len, nlines;
-    char *p, line[MAXLEN];
+    char line[MAXLEN], *p = allocbuf;
+    const char *allocmax = allocbuf + ALLOCSIZE;
     nlines = 0;
     while ((len = getline(line, MAXLEN)) > 0) {
-        if (nlines >= maxlines || (p = alloc(len)) == NULL)
+        if (nlines >= maxlines || p + len > allocmax)
             return -1;
         else {
             line[len-1] = '\0';
             strcpy(p, line);
             lineptr[nlines++] = p;
+            p += len;
         }
     }
     return nlines;
@@ -65,18 +68,6 @@ int getline(char s[], int lim) {
     return i;
 }
 
-#define ALLOCSIZE 10000
-static char allocbuf[ALLOCSIZE];
-static char *allocp = allocbuf;
-
-char *alloc(int n) {
-    if (allocbuf + ALLOCSIZE - allocp >= n) {
-        allocp += n;
-        return allocp - n;
-    }
-    else
-        return 0;
-}
 
 void qsort(char *v[], int left, int right) {
     int i, last;
