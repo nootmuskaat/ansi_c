@@ -7,6 +7,10 @@ CFLAGS=-Wall -Werror -std=c11 -ggdb
 findstr: findstr.c getline.c getline.h
 	$(CC) $(CFLAGS) -o $@ findstr.c getline.c
 
+tail: ex13.c getline.c getline.h
+	$(CC) $(CFLAGS) -o $@ ex13.c getline.c
+
+
 .PHONY: clean
 clean:
-	rm findstr
+	rm findstr tail *.o
