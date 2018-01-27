@@ -27,29 +27,30 @@ int main(int argc, char *argv[]) {
      * meets buffer size requirements without knowing how big input is */
     const int bufsize = (tlen + 1) * maxline;
     
-    int llen; 
+    int llen, nolines;
     char *tail[tlen], tailbuf[bufsize], line[maxline];
     char *bufp = tailbuf;
     int taili = 0;
    
     while ((llen = getline(line, maxline)) > 0) {
+        nolines++;
         if (bufp - tailbuf + llen > bufsize)
             bufp = tailbuf;
         strcpy(bufp, line);
         tail[taili] = bufp;
-        bufp += llen;
+        bufp += llen+1;
         taili = (taili + 1 < tlen) ? taili+1 : 0;
     }
 
-    if (tail[taili] >= tailbuf && tail[taili] <= (tailbuf+bufsize)) {
-        while (--tlen > 0) {
+    if (nolines > tlen) {
+        nolines = tlen;
+        while (nolines-- > 0) {
             printf("%s", tail[taili]);
             taili = (taili + 1 < tlen) ? taili+1 : 0;
         }
     }
     else {
-        int i = 0;
-        while (i++ != taili) {
+        while (nolines-- > 0) {
             printf("%s", tail[taili]);
         }
     }

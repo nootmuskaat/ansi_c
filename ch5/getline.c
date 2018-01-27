@@ -8,6 +8,6 @@ int getline(char *s, int lim) {
         s[i++] = c;
     if (c == '\n')
         s[i++] = c;
-    s[i++] = '\0';
+    s[i] = '\0';
     return i;
 }
