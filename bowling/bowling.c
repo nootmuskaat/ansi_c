@@ -5,6 +5,7 @@ static short score[10][3]; // a frame's score is made up of at most 3 roles
 static short frame = 0;
 static short roll = 0;
 
+
 // begin game by zeroing out all frames
 void bowl_init() {
     int i, j;
@@ -61,18 +62,17 @@ int bowl_score(void) {
     return n;
 }
 
+static void print_frame(short f[]);
+static void print_frame10(short f[]);
+
 void print_score(void) {
     int fr, total;
-    
+
     // individual throws
-    for (fr = 0; fr < 10; fr++) {
-        if (score[fr][0] == 10)
-            printf(" [X] ");
-        else if (score[fr][0] + score[fr][1] == 10)
-            printf("%1d[/] ", score[fr][0]);
-        else
-            printf("%1d[%1d] ", score[fr][0], score[fr][1]);
+    for (fr = 0; fr < 9; fr++) {
+        print_frame(score[fr]);
     }
+    print_frame10(score[fr]);
     printf("\n");
 
     // frame totals
@@ -84,4 +84,33 @@ void print_score(void) {
     printf("\n");
 
     return;
+}
+
+
+
+static void print_frame(short f[]) {
+        if (f[0] == 10)
+            printf(" [X] ");
+        else if (f[0] + f[1] == 10)
+            printf("%c[/] ",
+                    (f[0] == 0) ? '-' : '0'+f[0]);
+        else
+            printf("%c[%c] ",
+                    (f[0] == 0) ? '-' : '0'+f[0],
+                    (f[1] == 0) ? '-' : '0'+f[1]);
+}
+
+static void print_frame10(short f[]) {
+        if (f[0] == 10)
+            printf("X[%c][%c]",
+                    (f[1] == 10) ? 'X' : (f[1] == 0) ? '-' : '0'+f[1],
+                    (f[2] == 10) ? 'X' : (f[2] == 0) ? '-' : '0'+f[2]);
+        else if (f[0] + f[1] == 10)
+            printf("%c[/][%c]",
+                    (f[0] == 0) ? '-' : '0'+f[0],
+                    (f[2] == 10) ? 'X' : (f[2] == 0) ? '-' : '0'+f[2]);
+        else
+            printf("%c[%c][ ]",
+                    (f[0] == 0) ? '-' : '0'+f[0],
+                    (f[1] == 0) ? '-' : '0'+f[1]);
 }
